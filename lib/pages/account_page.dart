@@ -1,3 +1,4 @@
+import 'package:chatmate/pages/forgotpassword.dart';
 import 'package:chatmate/pages/signuppage.dart';
 import 'package:chatmate/widgets/accountpagebanner.dart';
 import 'package:chatmate/widgets/customtxtfeild.dart';
@@ -16,23 +17,36 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AcoountPageState extends State<AccountPage> {
-  final _loginformkey=GlobalKey<FormState>();
-  String _emailadress="";
-  String _password="";
+  final _loginformkey = GlobalKey<FormState>();
+  final _auth = FirebaseAuth.instance;
+  String _emailadress = "";
+  String _password = "";
 
-  void _submitForm(){
+  _submitloginForm(BuildContext ctx) async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+          email: _emailadress, password: _password);
+    } on FirebaseAuthException catch (err) {
+      var message = "An error occured,check your credentials";
 
+      message = err.code;
 
-  }
-
-  void _tryLogin(){
-    final isValid=_loginformkey.currentState!.validate();
-      FocusScope.of(context).unfocus();
-    if(isValid){
-      _loginformkey.currentState!.save();
-
+      ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
+        content: Text(message),
+        backgroundColor: Theme.of(context).colorScheme.error,
+      ));
     }
   }
+
+  void _tryLogin() async {
+    final isValid = _loginformkey.currentState!.validate();
+    FocusScope.of(context).unfocus();
+    if (isValid) {
+      _loginformkey.currentState!.save();
+      await _submitloginForm(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,38 +61,36 @@ class _AcoountPageState extends State<AccountPage> {
             const SizedBox(
               height: 10,
             ),
-             CustomTextFeild(
-              onSave: (value){
-                _emailadress=value!;
+            CustomTextFeild(
+              onSave: (value) {
+                _emailadress = value!;
               },
-              validator: (value){
-                if(value!.isEmpty||!value.contains("@")){
+              validator: (value) {
+                value = value!.toLowerCase();
+                if (value.isEmpty || !value.contains("@")) {
                   return " Entered email is invalid";
                 }
                 return null;
               },
               label: "Email Address",
               isobs: false,
-              sub: false,
             ),
             CustomTextFeild(
-              onSave: (value){
-                _password=value!;
-              },
-              label: "Passsword",
-              isobs: true,
-              sub: false,
-             validator:  (value){
-                if(value!.isEmpty||value.length<8){
-                  return "Should be minimum of 8 characters";
-                }
-                return null;
-              }
+                onSave: (value) {
+                  _password = value!;
+                },
+                label: "Passsword",
+                isobs: true,
+                validator: (value) {
+                  if (value!.isEmpty || value.length < 8) {
+                    return "Should be minimum of 8 characters";
+                  }
+                  return null;
+                }),
+            CustomButton(label: "Login", ontap: _tryLogin),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
-            CustomButton(label: "Login",ontap: _tryLogin),
-              SizedBox(
-            height: MediaQuery.of(context).size.height *0.02,
-          ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -90,7 +102,15 @@ class _AcoountPageState extends State<AccountPage> {
                         return const SignUpPage();
                       }));
                     }),
-                CustomTextButton(text: "Forgot Passsword?",ontap: (){},)
+                CustomTextButton(
+                  text: "Forgot Passsword?",
+                  ontap: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      return const ForgotPassword();
+                    }));
+                  },
+                )
               ],
             ),
             SizedBox(

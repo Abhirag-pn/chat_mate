@@ -1,31 +1,23 @@
 import 'package:chatmate/constants/colors.dart';
 import 'package:flutter/material.dart';
 
-class CustomTextFeild extends StatefulWidget {
+class BioTextFeild extends StatefulWidget {
   final String label;
-  final bool isobs;
-   final String? deafult;
-
+  
 
   final String? Function(String?)? validator;
   final void Function(String?)? onSave;
-
-  final bool readonly;
-   const CustomTextFeild(
+  const BioTextFeild(
       {super.key,
       required this.label,
-      required this.isobs,
-       this.validator,
-      required this.onSave,
-      this.deafult,
-      this.readonly=false}
-      );
+      required this.validator,
+      required this.onSave});
 
   @override
-  State<CustomTextFeild> createState() => _CustomTextFeildState();
+  State<BioTextFeild> createState() => _BioTextFeildState();
 }
 
-class _CustomTextFeildState extends State<CustomTextFeild> {
+class _BioTextFeildState extends State<BioTextFeild> {
   bool hide = false;
   @override
   Widget build(BuildContext context) {
@@ -39,8 +31,7 @@ class _CustomTextFeildState extends State<CustomTextFeild> {
             style: Theme.of(context).textTheme.labelMedium,
           ),
           TextFormField(
-            readOnly: widget.readonly,
-            initialValue: widget.deafult,
+            maxLines: null,
               onSaved: widget.onSave,
               validator: widget.validator,
               style: Theme.of(context).textTheme.bodySmall,
@@ -49,17 +40,7 @@ class _CustomTextFeildState extends State<CustomTextFeild> {
               textCapitalization: TextCapitalization.none,
               decoration: InputDecoration(
                 isDense: true,
-                suffixIcon: widget.isobs
-                    ? IconButton(
-                        onPressed: () {
-                          hide = !hide;
-                          setState(() {});
-                        },
-                        icon: Icon(
-                          hide ? Icons.visibility : Icons.visibility_off,
-                          color: primary,
-                        ))
-                    : null,
+               
                 errorBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                         color: Theme.of(context).colorScheme.error, width: 1.0),
