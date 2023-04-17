@@ -10,6 +10,7 @@ import '../widgets/custombutton.dart';
 import '../widgets/txtbutton.dart';
 
 class AccountPage extends StatefulWidget {
+  static const routeName = "signin";
   const AccountPage({super.key});
 
   @override
@@ -97,18 +98,12 @@ class _AcoountPageState extends State<AccountPage> {
                 CustomTextButton(
                     text: "Sign Up",
                     ontap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return const SignUpPage();
-                      }));
+                      Navigator.of(context).pushNamed(SignUpPage.routeName);
                     }),
                 CustomTextButton(
                   text: "Forgot Passsword?",
                   ontap: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return const ForgotPassword();
-                    }));
+                    Navigator.of(context).pushNamed(ForgotPassword.routeName);
                   },
                 )
               ],

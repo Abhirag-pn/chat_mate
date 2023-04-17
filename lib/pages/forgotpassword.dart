@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 
 class ForgotPassword extends StatefulWidget {
+    static const routeName="forgot-passwords";
   const ForgotPassword({super.key});
 
   @override

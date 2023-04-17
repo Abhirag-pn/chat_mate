@@ -8,6 +8,7 @@ import '../widgets/customtxtfeild.dart';
 import '../widgets/txtbutton.dart';
 
 class SignUpPage extends StatefulWidget {
+  static const routeName = "signup";
   const SignUpPage({super.key});
 
   @override
@@ -28,7 +29,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
       await _auth.createUserWithEmailAndPassword(
           email: _emailadress, password: _password);
-
     } on FirebaseAuthException catch (err) {
       var msg = "An error occured,check your credentials";
 
@@ -50,10 +50,7 @@ class _SignUpPageState extends State<SignUpPage> {
       _signupformkey.currentState!.save();
       await _submitsignupForm(context);
       if (context.mounted) {
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (context) {
-          return const EmailVerification();
-        }));
+        Navigator.of(context).pushReplacementNamed(EmailVerification.routeName);
       }
     }
   }

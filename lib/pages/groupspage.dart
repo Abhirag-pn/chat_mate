@@ -1,11 +1,18 @@
+import 'package:chatmate/pages/homepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class GroupsPage extends StatelessWidget {
+    static const routeName="groups";
   const GroupsPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: (){
+        FirebaseAuth.instance.signOut();
+        Navigator.of(context).pushNamed(Homepage.routeName);
+      }),
       appBar: AppBar(title: const Text("Groups"),centerTitle: true,),
         body: StreamBuilder(
       stream: FirebaseFirestore.instance.collection("groups").snapshots(),
@@ -19,13 +26,14 @@ class GroupsPage extends StatelessWidget {
                   return ListTile(
                     title: Text(
                       snapshot.data!.docs[index]["name"],
-                      style: TextStyle(color: Colors.red),
+                      style: const 
+                      TextStyle(color: Colors.red),
                     ),
                   );
                 });
           } else {
             return const Text(
-              "data",
+              "No groups found",
               style: TextStyle(color: Colors.black),
             );
           }

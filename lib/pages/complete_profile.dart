@@ -1,17 +1,20 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:chatmate/pages/groupspage.dart';
 import 'package:chatmate/widgets/biotextfeild.dart';
 import 'package:chatmate/widgets/custombutton.dart';
 import 'package:chatmate/widgets/customtxtfeild.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:flutter/material.dart';
 
 class CompleteProfile extends StatefulWidget {
+  static const routeName = "Complete-profile";
   const CompleteProfile({super.key});
 
   @override
@@ -28,26 +31,55 @@ class _CompleteProfileState extends State<CompleteProfile> {
   Future<void> pickImage() async {}
 
   Future<void> finishProfile() async {
-    final formstate = _formkey.currentState!.validate();
-    log(12);
-    FocusScope.of(context).unfocus();
-    if (formstate) {
-      _formkey.currentState!.save();
-      if (usermail != null && profilepic != null) {
-      TaskSnapshot picsnap=  await FirebaseStorage.instance
-            .ref()
-            .child("profilepictures")
-            .child(FirebaseAuth.instance.currentUser!.uid)
-            .putFile(profilepic!);
+    try {
+      final formstate = _formkey.currentState!.validate();
 
-            String downloadurl=await picsnap.ref.getDownloadURL();
-        await FirebaseFirestore.instance.collection("users").add({
-          "email": usermail,
-          "username": username,
-          "bio": bio,
-          "imgurl":downloadurl
-        });
+      FocusScope.of(context).unfocus();
+      if (formstate) {
+        _formkey.currentState!.save();
+        if (usermail != null) {
+          if (profilepic != null) {
+            TaskSnapshot picsnap = await FirebaseStorage.instance
+                .ref()
+                .child("profilepictures")
+                .child(FirebaseAuth.instance.currentUser!.uid)
+                .putFile(profilepic!);
+
+            String downloadurl = await picsnap.ref.getDownloadURL();
+            FirebaseAuth.instance.currentUser!.updateDisplayName(username);
+            FirebaseAuth.instance.currentUser!.updatePhotoURL(downloadurl);
+
+            await FirebaseFirestore.instance.collection("users").add({
+              "email": usermail,
+              "username": username,
+              "bio": bio,
+              "imgurl": downloadurl
+            });
+            if (context.mounted) {
+              Navigator.of(context).pushReplacementNamed(GroupsPage.routeName);
+            }
+          } else {
+            FirebaseAuth.instance.currentUser!.updateDisplayName(username);
+            await FirebaseFirestore.instance.collection("users").add({
+              "email": usermail,
+              "username": username,
+              "bio": bio,
+              "imgurl": null
+            });
+            if (context.mounted) {
+              Navigator.of(context).pushReplacementNamed(GroupsPage.routeName);
+            }
+          }
+        }
       }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.toString(),
+          ),
+        ),
+      );
     }
   }
 
@@ -69,8 +101,11 @@ class _CompleteProfileState extends State<CompleteProfile> {
               onTap: () async {
                 XFile? pickedimage =
                     await ImagePicker().pickImage(source: ImageSource.gallery);
+
                 if (pickedimage != null) {
-                  File convertedfile = File(pickedimage.path);
+                  CroppedFile? croppedimage = await ImageCropper()
+                      .cropImage(sourcePath: pickedimage.path);
+                  File convertedfile = File(croppedimage!.path);
                   setState(() {
                     profilepic = convertedfile;
                   });
