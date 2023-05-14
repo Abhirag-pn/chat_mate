@@ -1,4 +1,4 @@
-import 'package:chatmate/pages/homepage.dart';
+import 'package:chatmate/ui/screens/homepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,17 +16,17 @@ class GroupsPage extends StatelessWidget {
       appBar: AppBar(title: const Text("Groups"),centerTitle: true,),
         body: StreamBuilder(
       stream: FirebaseFirestore.instance.collection("groups").snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.connectionState == ConnectionState.active) {
-          if (snapshot.hasData && snapshot.data != null) {
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> groupsdata) {
+        if (groupsdata.connectionState == ConnectionState.active||groupsdata.connectionState== ConnectionState.done) {
+          if (groupsdata.hasData ) {
             return ListView.builder(
               
-                itemCount: snapshot.data!.docs.length,
+                itemCount: groupsdata.data!.size,
                 itemBuilder: (context, index) {
-                  return ListTile(
+                  return const ListTile(
                     title: Text(
-                      snapshot.data!.docs[index]["name"],
-                      style: const 
+                      "Hey",
+                      style: 
                       TextStyle(color: Colors.red),
                     ),
                   );

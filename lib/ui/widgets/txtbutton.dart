@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class CustomTextButton extends StatelessWidget {
   final String text;
   final VoidCallback ontap;
@@ -8,6 +7,11 @@ class CustomTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(onPressed: ontap, child: Text(text,style: Theme.of(context).textTheme.labelSmall,) );
+    return TextButton(
+        onPressed: ontap,
+        child: Text(
+          text,
+          style: Theme.of(context).textTheme.labelSmall,
+        ));
   }
 }

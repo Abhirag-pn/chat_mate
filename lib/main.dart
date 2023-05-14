@@ -1,13 +1,13 @@
 import 'package:chatmate/constants/colors.dart';
-import 'package:chatmate/pages/account_page.dart';
-import 'package:chatmate/pages/chatscreen.dart';
-import 'package:chatmate/pages/complete_profile.dart';
-import 'package:chatmate/pages/forgotpassword.dart';
-import 'package:chatmate/pages/groupspage.dart';
-import 'package:chatmate/pages/homepage.dart';
-import 'package:chatmate/pages/signuppage.dart';
+import 'package:chatmate/ui/screens/loginpage.dart';
+import 'package:chatmate/ui/screens/chatscreen.dart';
+import 'package:chatmate/ui/screens/forgotpassword.dart';
+import 'package:chatmate/ui/screens/groupspage.dart';
+import 'package:chatmate/ui/screens/homepage.dart';
+import 'package:chatmate/ui/screens/signuppage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'ui/screens/emailverification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Chatmate',
       theme: ThemeData(
+        textButtonTheme: TextButtonThemeData(style:TextButton.styleFrom(foregroundColor: primary,)),
         appBarTheme: const AppBarTheme(
             backgroundColor: primary,
             centerTitle: true,
@@ -59,7 +60,7 @@ class MyApp extends StatelessWidget {
             color: primary,
             fontSize: 13,
             fontFamily: 'Poppins',
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.bold
           ),
           displaySmall: TextStyle(
             color: primary,
@@ -78,13 +79,13 @@ class MyApp extends StatelessWidget {
       onUnknownRoute: (settings) =>
           MaterialPageRoute(builder: (context) => const Homepage()),
       routes: {
-        CompleteProfile.routeName: (context) => const CompleteProfile(),
+        Homepage.routeName:(context) => const Homepage(),
         AccountPage.routeName: (context) => const AccountPage(),
         ChatScreen.routeName: (context) => const ChatScreen(),
         ForgotPassword.routeName: (context) => const ForgotPassword(),
         GroupsPage.routeName: (context) => const GroupsPage(),
-        Homepage.routeName: (context) => const Homepage(),
-        SignUpPage.routeName: (context) => const SignUpPage()
+        SignUpPage.routeName: (context) => const SignUpPage(),
+        EmailVerification.routeName: (context) => const EmailVerification()
       },
     );
   }

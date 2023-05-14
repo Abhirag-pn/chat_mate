@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 
-import '../constants/colors.dart';
+import '../../constants/colors.dart';
 
 class CustomBanner extends StatelessWidget {
   final String title,subtitle;
@@ -17,7 +17,7 @@ class CustomBanner extends StatelessWidget {
                 left: MediaQuery.of(context).size.width / 10,
                 top: MediaQuery.of(context).size.height / 15),
             width: double.infinity,
-            height: MediaQuery.of(context).size.height / 2,
+            height: MediaQuery.of(context).size.height / 2.5,
             decoration: const BoxDecoration(color: primary),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,13 +40,13 @@ class CustomBanner extends StatelessWidget {
           ),
           SvgPicture.asset(
             "assets/image/chatp.svg",
-            height: scrnsize/5,
+            height: scrnsize/5.5,
           ),
           Align(
             alignment: Alignment.bottomLeft,
             child: SvgPicture.asset(
               "assets/image/circ.svg",
-              height: scrnsize/8,
+              height: scrnsize/9,
             ),
           )
         ]);

@@ -4,22 +4,20 @@ import 'package:flutter/material.dart';
 class CustomTextFeild extends StatefulWidget {
   final String label;
   final bool isobs;
-   final String? deafult;
-
+  final String? deafult;
+  final TextEditingController controller;
 
   final String? Function(String?)? validator;
-  final void Function(String?)? onSave;
 
   final bool readonly;
-   const CustomTextFeild(
+  const CustomTextFeild(
       {super.key,
       required this.label,
       required this.isobs,
-       this.validator,
-      required this.onSave,
+      this.validator,
       this.deafult,
-      this.readonly=false}
-      );
+      this.readonly = false,
+      required this.controller});
 
   @override
   State<CustomTextFeild> createState() => _CustomTextFeildState();
@@ -39,9 +37,9 @@ class _CustomTextFeildState extends State<CustomTextFeild> {
             style: Theme.of(context).textTheme.labelMedium,
           ),
           TextFormField(
-            readOnly: widget.readonly,
-            initialValue: widget.deafult,
-              onSaved: widget.onSave,
+              readOnly: widget.readonly,
+              initialValue: widget.deafult,
+              controller: widget.controller,
               validator: widget.validator,
               style: Theme.of(context).textTheme.bodySmall,
               cursorColor: Theme.of(context).colorScheme.secondary,
@@ -60,6 +58,10 @@ class _CustomTextFeildState extends State<CustomTextFeild> {
                           color: primary,
                         ))
                     : null,
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.error, width: 1.0),
+                    borderRadius: BorderRadius.circular(10)),
                 errorBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                         color: Theme.of(context).colorScheme.error, width: 1.0),
